@@ -6,7 +6,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 def get_gspread_client():
     encoded_key = os.environ.get("SERVICE_ACCOUNT_BASE64")
     if not encoded_key:
-        raise Exception("SERVICE_ACCOUNT_BASE64 환경변수가 없습니다.")
+        raise Exception("환경변수 'SERVICE_ACCOUNT_BASE64'가 설정되지 않았습니다.")
 
     decoded_path = "decoded_service_account.json"
     with open(decoded_path, "wb") as f:
