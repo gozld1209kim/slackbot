@@ -10,29 +10,25 @@ def handle_monster_command(text):
             "text": "❗ 예: `/몹검색 슬라임`"
         })
 
-    try:
-        sheet = client.open_by_url("https://docs.google.com/spreadsheets/d/1bQSv69_gh2_lSaUnTfFTK7VLumf5gPUzfqV3jdCR2VY")
-        worksheet = sheet.worksheet("Monster")
-        rows = worksheet.get_all_values()
+    sheet = client.open_by_url("https://docs.google.com/spreadsheets/d/1bQSv69_gh2_lSaUnTfFTK7VLumf5gPUzfqV3jdCR2VY")
+    worksheet = sheet.worksheet("Monster")
+    rows = worksheet.get_all_values()
 
-        keyword = text.strip()
-        matched = []
+    # ✅ 숫자로 시작하는 실제 데이터 행부터 시작
+    start_index = 0
+    for i, row in enumerate(rows):
+        if len(row) >= 1 and row[0].strip().isdigit():
+            start_index = i
+            break
 
-        for row in rows[1:]:  # 2번째 줄부터 (헤더 제외)
-            if len(row) > 1 and row[1]:
-                note = row[1].strip()
-                if keyword in note:
-                    index = row[0].strip() if len(row) > 0 else "N/A"
-                    matched.append(f"• `{note}` → ID: `{index}`")
+    keyword = text.strip().lower()
+    matched = []
+    for row in rows[start_index:]:
+        if len(row) >= 2 and keyword in row[1].strip().lower():
+            matched.append(f"• `{row[1]}` → ID: `{row[0]}`")
 
-        result = "\n".join(matched[:10]) if matched else "😕 검색 결과 없음"
-        return jsonify({
-            "response_type": "ephemeral",
-            "text": f"🔍 `{text}` 검색 결과:\n{result}"
-        })
-
-    except Exception as e:
-        return jsonify({
-            "response_type": "ephemeral",
-            "text": f"❌ 오류 발생: {str(e)}"
-        })
+    result = "\n".join(matched[:10]) if matched else "😕 검색 결과 없음"
+    return jsonify({
+        "response_type": "ephemeral",
+        "text": f"🔍 `{text}` 검색 결과:\n{result}"
+    })
