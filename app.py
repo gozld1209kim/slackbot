@@ -2,6 +2,7 @@ import os
 from flask import Flask, request
 from cheat_handler import handle_cheat_command  # cheat 핸들러 import
 from monster_handler import handle_monster_command  # 다른 핸들러도 함께 사용 가능
+from item_handler import handle_item_command
 
 app = Flask(__name__)
 
@@ -14,6 +15,11 @@ def cheat_command():
 def monster_command():
     text = request.form.get("text", "").strip()
     return handle_monster_command(text)
+
+@app.route("/slack/item", methods=["POST"])
+def item_command():
+    text = request.form.get("text", "").strip()
+    return handle_item_command(text)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
