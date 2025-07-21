@@ -1,19 +1,20 @@
 import os
-from flask import Flask, request, jsonify
-from cheat_handler import handle_cheat_command
-from monster_handler import handle_monster_command
+from flask import Flask, request
+from cheat_handler import handle_cheat_command  # cheat 핸들러 import
+from monster_handler import handle_monster_command  # 다른 핸들러도 함께 사용 가능
 
 app = Flask(__name__)
 
 @app.route("/slack/cheat", methods=["POST"])
-def slash_cheat():
-    text = request.form.get("text", "")
+def cheat_command():
+    text = request.form.get("text", "").strip()
     return handle_cheat_command(text)
 
 @app.route("/slack/monster", methods=["POST"])
-def slash_monster():
-    text = request.form.get("text", "")
+def monster_command():
+    text = request.form.get("text", "").strip()
     return handle_monster_command(text)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
