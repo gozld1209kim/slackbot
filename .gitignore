@@ -1,0 +1,6 @@
+# Google API 인증키
+service_account.json
+
+# 기타 임시 파일/로그
+*.log
+__pycache__/
