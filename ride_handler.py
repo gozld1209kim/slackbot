@@ -1,7 +1,5 @@
 from flask import jsonify
-from gsheet_client import get_gspread_client
-
-client = get_gspread_client()
+from gsheet_client import get_sheet
 
 SPREADSHEET_KEY = "1bQSv69_gh2_lSaUnTfFTK7VLumf5gPUzfqV3jdCR2VY"
 SHEET_NAME = "RideInfo"
@@ -30,9 +28,7 @@ def handle_ride_command(text):
             "text": f"⚠️ 유효하지 않은 등급입니다: `{grade_input}`\n가능한 등급: {', '.join(GRADE_MAP.keys())}"
         })
 
-    sheet = client.open_by_key(SPREADSHEET_KEY)
-    worksheet = sheet.worksheet(SHEET_NAME)
-    rows = worksheet.get_all_values()
+    rows = get_sheet(SPREADSHEET_KEY, SHEET_NAME)
 
     results = []
     for row in rows[1:]:  # 헤더 제외

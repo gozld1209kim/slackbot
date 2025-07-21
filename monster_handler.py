@@ -1,18 +1,13 @@
 from flask import jsonify
-from gsheet_client import get_gspread_client
-
-client = get_gspread_client()
+from gsheet_client import get_sheet
 
 def handle_monster_command(text):
+    rows = get_sheet("1bQSv69_gh2_lSaUnTfFTK7VLumf5gPUzfqV3jdCR2VY", "Monster")
     if not text:
         return jsonify({
             "response_type": "ephemeral",
             "text": "❗ 예: `/몹검색 슬라임`"
         })
-
-    sheet = client.open_by_key("1bQSv69_gh2_lSaUnTfFTK7VLumf5gPUzfqV3jdCR2VY")
-    worksheet = sheet.worksheet("Monster")
-    rows = worksheet.get_all_values()
 
     keyword = text.strip()
     matched = []

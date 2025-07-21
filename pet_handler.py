@@ -1,7 +1,5 @@
 from flask import jsonify
-from gsheet_client import get_gspread_client
-
-client = get_gspread_client()
+from gsheet_client import get_sheet
 
 SPREADSHEET_KEY = "1bQSv69_gh2_lSaUnTfFTK7VLumf5gPUzfqV3jdCR2VY"
 SHEET_NAME = "PetInfo"
@@ -16,6 +14,7 @@ GRADE_MAP = {
 }
 
 def handle_pet_command(text):
+    rows = get_sheet(SPREADSHEET_KEY, SHEET_NAME)
     grade_input = text.strip()
     if not grade_input:
         return jsonify({
@@ -30,12 +29,8 @@ def handle_pet_command(text):
             "text": f"⚠️ 유효하지 않은 등급입니다: `{grade_input}`\n가능한 등급: {', '.join(GRADE_MAP.keys())}"
         })
 
-    sheet = client.open_by_key(SPREADSHEET_KEY)
-    worksheet = sheet.worksheet(SHEET_NAME)
-    rows = worksheet.get_all_values()
-
     results = []
-    for row in rows[1:]:  # 헤더 제외
+    for row in rows[1:]:
         if len(row) >= 3 and row[2] == grade_code:
             results.append(f"• `{row[0]}` → `{row[1]}`")
 

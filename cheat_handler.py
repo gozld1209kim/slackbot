@@ -1,25 +1,19 @@
 from flask import jsonify
-from gsheet_client import get_gspread_client
+from gsheet_client import get_sheet
 
-client = get_gspread_client()
-
-# 스프레드시트 고유 키
 SPREADSHEET_KEY = "1wR7HfkOxMP8xeWPNuhTQXGN9cdFFgWTEWrUp_1MBXSQ"
 SHEET_NAME = "치트키"
 SPREADSHEET_URL = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_KEY}/edit"
 
 def handle_cheat_command(text):
-    if not text:  # '/치트'만 입력한 경우
+    rows = get_sheet(SPREADSHEET_KEY, SHEET_NAME)
+    if not text:
         return jsonify({
             "response_type": "ephemeral",
             "text": f"📄 치트키 전체 보기: <{SPREADSHEET_URL}|스프레드시트 열기>"
         })
-#
-    keyword = text.strip()
-    sheet = client.open_by_key(SPREADSHEET_KEY)
-    worksheet = sheet.worksheet(SHEET_NAME)
-    rows = worksheet.get_all_values()
 
+    keyword = text.strip()
     results = []
     for row in rows[1:]:
         if len(row) >= 3 and keyword in row[1]:
