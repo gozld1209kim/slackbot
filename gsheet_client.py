@@ -21,3 +21,6 @@ gc = gspread.authorize(credentials)
 def get_sheet(sheet_key: str, worksheet_name: str):
     sh = gc.open_by_key(sheet_key)
     return sh.worksheet(worksheet_name)
+
+def get_gspread_client():
+    return gc
