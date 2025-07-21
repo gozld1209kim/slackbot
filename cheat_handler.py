@@ -14,7 +14,7 @@ def handle_cheat_command(text):
             "response_type": "ephemeral",
             "text": f"📄 치트키 전체 보기: <{SPREADSHEET_URL}|스프레드시트 열기>"
         })
-
+#
     keyword = text.strip()
     sheet = client.open_by_key(SPREADSHEET_KEY)
     worksheet = sheet.worksheet(SHEET_NAME)
