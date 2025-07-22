@@ -41,10 +41,11 @@ def get_sheet(sheet_key: str, worksheet_name: str):
     return data
 
 def force_refresh(sheet_key: str, worksheet_name: str):
-    """항상 최신 데이터로 강제 새로고침"""
+    print(f"[force_refresh] 갱신 요청: {sheet_key} / {worksheet_name}")
     sh = gc.open_by_key(sheet_key)
     worksheet = sh.worksheet(worksheet_name)
     data = worksheet.get_all_values()
+    print(f"[force_refresh] 새로 가져온 행 수: {len(data)}")
 
     cache_key = f"{sheet_key}:{worksheet_name}"
     _cache[cache_key] = {
@@ -52,3 +53,4 @@ def force_refresh(sheet_key: str, worksheet_name: str):
         "expire": datetime.now() + timedelta(hours=24)
     }
     return data
+
