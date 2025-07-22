@@ -2,9 +2,9 @@ import os
 from flask import Flask, request
 from cheat_handler import handle_cheat_command  # cheat 핸들러 import
 from monster_handler import handle_monster_command  # 다른 핸들러도 함께 사용 가능
-from item_handler import handle_item_command # 아이템 검색
-from pet_handler import handle_pet_command #펫 등급 검색
-from ride_handler import handle_ride_command # 탈 것 등급 검색
+from item_handler import handle_item_command  # 아이템 검색
+from pet_handler import handle_pet_command  # 펫 등급 검색
+from ride_handler import handle_ride_command  # 탈 것 등급 검색
 from item_detail_handler import handle_item_detail_command
 from cache_handler import handle_cache_status
 
@@ -43,6 +43,11 @@ def item_detail():
 @app.route("/slack/cache", methods=["POST"])
 def cache_status_route():
     return handle_cache_status()
+
+# ✅ ping 헬스체크용 라우트 추가
+@app.route("/ping", methods=["GET"])
+def ping():
+    return "pong", 200
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
