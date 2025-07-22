@@ -6,6 +6,7 @@ from item_handler import handle_item_command # 아이템 검색
 from pet_handler import handle_pet_command #펫 등급 검색
 from ride_handler import handle_ride_command # 탈 것 등급 검색
 from item_detail_handler import handle_item_detail_command
+from cache_handler import handle_cache_status
 
 app = Flask(__name__)
 
@@ -38,6 +39,10 @@ def ride_command():
 def item_detail():
     text = request.form.get("text", "")
     return handle_item_detail_command(text)
+
+@app.route("/캐시상태", methods=["POST"])
+def cache_status_route():
+    return handle_cache_status()
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
