@@ -85,7 +85,7 @@ def handle_item_detail_command(text):
     for row in rows[1:]:
         index = row[0].strip()
         name = row[3].strip()
-        if keyword == index or keyword in name:
+        if keyword == index or keyword == name:
             matched = row
             break
 
