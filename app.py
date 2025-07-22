@@ -40,7 +40,7 @@ def item_detail():
     text = request.form.get("text", "")
     return handle_item_detail_command(text)
 
-@app.route("/캐시상태", methods=["POST"])
+@app.route("/slack/cache", methods=["POST"])
 def cache_status_route():
     return handle_cache_status()
 
