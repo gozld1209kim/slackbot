@@ -1,5 +1,5 @@
 from flask import jsonify
-from gsheet_client import get_sheet
+from gsheet_client import get_sheet, force_refresh
 
 SPREADSHEET_KEY = "1bQSv69_gh2_lSaUnTfFTK7VLumf5gPUzfqV3jdCR2VY"
 SHEET_NAME = "PetInfo"
@@ -14,7 +14,13 @@ GRADE_MAP = {
 }
 
 def handle_pet_command(text):
-    rows = get_sheet(SPREADSHEET_KEY, SHEET_NAME)
+    force = text.endswith("*")
+    if force:
+        text = text[:-1].strip()
+        rows = force_refresh(SPREADSHEET_KEY, SHEET_NAME)
+    else:
+        rows = get_sheet(SPREADSHEET_KEY, SHEET_NAME)
+
     grade_input = text.strip()
     if not grade_input:
         return jsonify({

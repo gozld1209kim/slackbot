@@ -1,12 +1,18 @@
 from flask import jsonify
-from gsheet_client import get_sheet
+from gsheet_client import get_sheet, force_refresh
 
 SPREADSHEET_KEY = "1wR7HfkOxMP8xeWPNuhTQXGN9cdFFgWTEWrUp_1MBXSQ"
 SHEET_NAME = "치트키"
 SPREADSHEET_URL = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_KEY}/edit"
 
 def handle_cheat_command(text):
-    rows = get_sheet(SPREADSHEET_KEY, SHEET_NAME)
+    force = text.endswith("*")
+    if force:
+        text = text[:-1].strip()
+        rows = force_refresh(SPREADSHEET_KEY, SHEET_NAME)
+    else:
+        rows = get_sheet(SPREADSHEET_KEY, SHEET_NAME)
+
     if not text:
         return jsonify({
             "response_type": "ephemeral",

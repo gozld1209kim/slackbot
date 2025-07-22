@@ -1,5 +1,5 @@
 from flask import jsonify
-from gsheet_client import get_sheet
+from gsheet_client import get_sheet, force_refresh
 
 SPREADSHEET_KEY = "1bQSv69_gh2_lSaUnTfFTK7VLumf5gPUzfqV3jdCR2VY"
 SHEET_NAME = "RideInfo"
@@ -14,6 +14,13 @@ GRADE_MAP = {
 }
 
 def handle_ride_command(text):
+    force = text.endswith("*")
+    if force:
+        text = text[:-1].strip()
+        rows = force_refresh(SPREADSHEET_KEY, SHEET_NAME)
+    else:
+        rows = get_sheet(SPREADSHEET_KEY, SHEET_NAME)
+
     grade_input = text.strip()
     if not grade_input:
         return jsonify({
@@ -27,8 +34,6 @@ def handle_ride_command(text):
             "response_type": "ephemeral",
             "text": f"⚠️ 유효하지 않은 등급입니다: `{grade_input}`\n가능한 등급: {', '.join(GRADE_MAP.keys())}"
         })
-
-    rows = get_sheet(SPREADSHEET_KEY, SHEET_NAME)
 
     results = []
     for row in rows[1:]:  # 헤더 제외

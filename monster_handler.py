@@ -1,8 +1,14 @@
 from flask import jsonify
-from gsheet_client import get_sheet
+from gsheet_client import get_sheet, force_refresh
 
 def handle_monster_command(text):
-    rows = get_sheet("1bQSv69_gh2_lSaUnTfFTK7VLumf5gPUzfqV3jdCR2VY", "Monster")
+    force = text.endswith("*")
+    if force:
+        text = text[:-1].strip()
+        rows = force_refresh("1bQSv69_gh2_lSaUnTfFTK7VLumf5gPUzfqV3jdCR2VY", "Monster")
+    else:
+        rows = get_sheet("1bQSv69_gh2_lSaUnTfFTK7VLumf5gPUzfqV3jdCR2VY", "Monster")
+
     if not text:
         return jsonify({
             "response_type": "ephemeral",
