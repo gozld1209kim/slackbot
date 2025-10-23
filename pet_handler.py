@@ -11,6 +11,7 @@ GRADE_MAP = {
     "고대": "PG_ANCIENT",
     "전설": "PG_LEGEND",
     "신화": "PG_MYTH",
+    "유일": "PG_UNIQUE",
 }
 
 def handle_pet_command(text):

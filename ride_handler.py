@@ -11,6 +11,7 @@ GRADE_MAP = {
     "고대": "RG_ANCIENT",
     "전설": "RG_LEGEND",
     "신화": "RG_MYTH",
+    "유일": "RG_UNIQUE",
 }
 
 def handle_ride_command(text):
